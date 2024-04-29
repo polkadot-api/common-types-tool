@@ -51,7 +51,7 @@ dependencies:
     specifier: ^7.8.1
     version: 7.8.1
   smoldot:
-    specifier: ^2.0.24
+    specifier: ^2.0.25
     version: 2.0.25
   tailwind-merge:
     specifier: ^2.3.0

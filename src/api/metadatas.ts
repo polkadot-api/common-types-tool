@@ -3,7 +3,6 @@ import { V14, V15 } from "@polkadot-api/substrate-bindings"
 import { createClient } from "@polkadot-api/substrate-client"
 import { state } from "@react-rxjs/core"
 import { get, set } from "idb-keyval"
-import { withLogsRecorder } from "polkadot-api/logs-provider"
 import { getSmProvider } from "polkadot-api/sm-provider"
 import { mapObject } from "polkadot-api/utils"
 import {
@@ -30,9 +29,6 @@ export const useCache$ = state(changeUseCache$, true)
 export const metadatas = mapObject(chains, (chain, key) => {
   const throughSmoldot$ = from(chain).pipe(
     map(getSmProvider),
-    map((provider) =>
-      withLogsRecorder((log) => console.log(key, log), provider),
-    ),
     map(createClient),
     map(getObservableClient),
     switchMap((observableClient) => {
