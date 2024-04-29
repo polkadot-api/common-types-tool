@@ -2,6 +2,7 @@ import { getObservableClient } from "@polkadot-api/observable-client"
 import { V14, V15 } from "@polkadot-api/substrate-bindings"
 import { createClient } from "@polkadot-api/substrate-client"
 import { state } from "@react-rxjs/core"
+import { createSignal } from "@react-rxjs/utils"
 import { get, set } from "idb-keyval"
 import { getSmProvider } from "polkadot-api/sm-provider"
 import { mapObject } from "polkadot-api/utils"
@@ -10,7 +11,6 @@ import {
   catchError,
   filter,
   finalize,
-  from,
   map,
   of,
   share,
@@ -21,13 +21,12 @@ import {
 } from "rxjs"
 import { selectedChains$ } from "../ChainPicker"
 import { chains } from "./smoldot"
-import { createSignal } from "@react-rxjs/utils"
 
 export const [changeUseCache$, setUseCache] = createSignal<boolean>()
 export const useCache$ = state(changeUseCache$, true)
 
-export const metadatas = mapObject(chains, (chain, key) => {
-  const throughSmoldot$ = from(chain).pipe(
+export const metadatas = mapObject(chains, (chain$, key) => {
+  const throughSmoldot$ = chain$.pipe(
     map(getSmProvider),
     map(createClient),
     map(getObservableClient),

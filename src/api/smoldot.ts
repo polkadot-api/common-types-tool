@@ -1,5 +1,14 @@
 import { startFromWorker } from "polkadot-api/smoldot/from-worker"
 import SmWorker from "polkadot-api/smoldot/worker?worker"
+import {
+  MonoTypeOperatorFunction,
+  Observable,
+  ReplaySubject,
+  combineLatest,
+  defer,
+  share,
+  switchMap,
+} from "rxjs"
 import { Chain } from "smoldot"
 
 export const smoldot = startFromWorker(new SmWorker())
@@ -29,25 +38,29 @@ const chainImports = {
   },
 }
 
-export const chains: Record<string, Promise<Chain>> = Object.fromEntries(
+export const chains: Record<string, Observable<Chain>> = Object.fromEntries(
   Object.entries(chainImports).flatMap(([key, chains]) => {
     const { relayChain, ...parachains } = chains
 
-    const chainRelayChain = relayChain.then(({ chainSpec }) =>
-      smoldot.addChain({
-        chainSpec,
-      }),
-    )
+    const chainRelayChain = defer(() =>
+      relayChain.then(({ chainSpec }) =>
+        smoldot.addChain({
+          chainSpec,
+        }),
+      ),
+    ).pipe(persist())
     const parachainChains = Object.entries(parachains).map(
       ([parachainKey, parachain]) =>
         [
           `${key}.${parachainKey}`,
-          Promise.all([chainRelayChain, parachain]).then(
-            ([chainRelayChain, parachain]) =>
+          combineLatest([chainRelayChain, parachain]).pipe(
+            switchMap(([chainRelayChain, parachain]) =>
               smoldot.addChain({
                 chainSpec: parachain.chainSpec,
                 potentialRelayChains: [chainRelayChain],
               }),
+            ),
+            persist(),
           ),
         ] as const,
     )
@@ -55,3 +68,12 @@ export const chains: Record<string, Promise<Chain>> = Object.fromEntries(
     return [[key, chainRelayChain], ...parachainChains]
   }),
 )
+
+function persist<T>(): MonoTypeOperatorFunction<T> {
+  return share({
+    connector: () => new ReplaySubject(1),
+    resetOnComplete: false,
+    resetOnRefCountZero: false,
+    resetOnError: true,
+  })
+}
