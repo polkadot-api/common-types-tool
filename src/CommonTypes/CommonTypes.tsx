@@ -6,12 +6,8 @@ import { Components, Virtuoso, VirtuosoHandle } from "react-virtuoso"
 import { firstValueFrom } from "rxjs"
 import { twMerge } from "tailwind-merge"
 import { CommonType } from "./CommonType"
-import {
-  commonTypeNames$,
-  commonTypes$,
-  newKnownTypes$,
-  setSearch,
-} from "./commonTypes.state"
+import { ExportKnownTypes } from "./Export"
+import { commonTypeNames$, commonTypes$, setSearch } from "./commonTypes.state"
 
 export function CommonTypes({ className }: { className?: string }) {
   const commonTypes = useStateObservable(commonTypes$)
@@ -86,18 +82,3 @@ const Item: Components["Item"] = forwardRef(
     />
   ),
 )
-
-const ExportKnownTypes = () => {
-  const newKnownTypes = useStateObservable(newKnownTypes$)
-
-  return (
-    <div className="p-2 max-h-96 flex flex-col gap-2">
-      <p>Here are the known types object for the selected chains</p>
-      <pre className="overflow-auto border rounded p-2">
-        <code className="select-all">
-          {JSON.stringify(newKnownTypes, null, 2)}
-        </code>
-      </pre>
-    </div>
-  )
-}

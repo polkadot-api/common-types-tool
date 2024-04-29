@@ -6,7 +6,7 @@ import {
 } from "@polkadot-api/metadata-builders"
 import { state } from "@react-rxjs/core"
 import { map } from "rxjs"
-import { metadatas } from "./api/metadatas"
+import { metadatas } from "../api/metadatas"
 
 type References = { direct: string[]; indirect: string[] }
 const emptyReferences: References = { direct: [], indirect: [] }
