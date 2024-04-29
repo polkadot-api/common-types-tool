@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge"
 import { CommonType } from "./CommonType"
 import { ExportKnownTypes } from "./Export"
 import { commonTypeNames$, commonTypes$, setSearch } from "./commonTypes.state"
+import { ImportKnownTypes } from "./Import"
 
 export function CommonTypes({ className }: { className?: string }) {
   const commonTypes = useStateObservable(commonTypes$)
@@ -40,14 +41,24 @@ export function CommonTypes({ className }: { className?: string }) {
   return (
     <div className={twMerge("flex flex-col gap-2", className)}>
       <div className="border-2 rounded p-2 sticky top-2 z-10 bg-slate-50 flex justify-between">
-        <Popover.Root>
-          <Popover.Trigger>
-            <Button>Export</Button>
-          </Popover.Trigger>
-          <Popover.Content>
-            <ExportKnownTypes />
-          </Popover.Content>
-        </Popover.Root>
+        <div className="flex items-center gap-2">
+          <Popover.Root>
+            <Popover.Trigger>
+              <Button>Export</Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <ExportKnownTypes />
+            </Popover.Content>
+          </Popover.Root>
+          <Popover.Root>
+            <Popover.Trigger>
+              <Button>Import</Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <ImportKnownTypes />
+            </Popover.Content>
+          </Popover.Root>
+        </div>
         <TextField.Root
           onChange={(evt) => changeSearch(evt.target.value)}
           onBlur={(evt) => {

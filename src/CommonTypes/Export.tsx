@@ -9,7 +9,7 @@ import {
 } from "./commonTypes.state"
 import { Checkbox } from "@radix-ui/themes"
 
-type RepositoryEntry = {
+export type RepositoryEntry = {
   name: string
   chains: string
   paths: string[]
