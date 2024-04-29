@@ -17,6 +17,7 @@ import {
 } from "rxjs"
 import { selectedChains$ } from "../ChainPicker"
 import { metadatas } from "../api/metadatas"
+import { persistSubscription } from "../lib/persistSubscription"
 
 export type MetadataEntry =
   (V15 | V14)["lookup"] extends Array<infer R> ? R : never
@@ -117,6 +118,8 @@ export const commonTypeNames$ = state(
 
       return result
     }, {}),
+    // Because the list is virtualized, we would lose the state when components unsubscribe
+    persistSubscription(),
   ),
   {},
 )

@@ -1,15 +1,8 @@
 import { startFromWorker } from "polkadot-api/smoldot/from-worker"
 import SmWorker from "polkadot-api/smoldot/worker?worker"
-import {
-  MonoTypeOperatorFunction,
-  Observable,
-  ReplaySubject,
-  combineLatest,
-  defer,
-  share,
-  switchMap,
-} from "rxjs"
+import { Observable, combineLatest, defer, switchMap } from "rxjs"
 import { Chain } from "smoldot"
+import { persistSubscription } from "../lib/persistSubscription"
 
 export const smoldot = startFromWorker(new SmWorker())
 
@@ -48,7 +41,7 @@ export const chains: Record<string, Observable<Chain>> = Object.fromEntries(
           chainSpec,
         }),
       ),
-    ).pipe(persist())
+    ).pipe(persistSubscription())
     const parachainChains = Object.entries(parachains).map(
       ([parachainKey, parachain]) =>
         [
@@ -60,7 +53,7 @@ export const chains: Record<string, Observable<Chain>> = Object.fromEntries(
                 potentialRelayChains: [chainRelayChain],
               }),
             ),
-            persist(),
+            persistSubscription(),
           ),
         ] as const,
     )
@@ -68,12 +61,3 @@ export const chains: Record<string, Observable<Chain>> = Object.fromEntries(
     return [[key, chainRelayChain], ...parachainChains]
   }),
 )
-
-function persist<T>(): MonoTypeOperatorFunction<T> {
-  return share({
-    connector: () => new ReplaySubject(1),
-    resetOnComplete: false,
-    resetOnRefCountZero: false,
-    resetOnError: true,
-  })
-}

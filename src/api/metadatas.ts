@@ -7,19 +7,18 @@ import { get, set } from "idb-keyval"
 import { getSmProvider } from "polkadot-api/sm-provider"
 import { mapObject } from "polkadot-api/utils"
 import {
-  ReplaySubject,
   catchError,
   filter,
   finalize,
   map,
   of,
-  share,
   startWith,
   switchMap,
   take,
   tap,
 } from "rxjs"
 import { selectedChains$ } from "../ChainPicker"
+import { persistSubscription } from "../lib/persistSubscription"
 import { chains } from "./smoldot"
 
 export const [changeUseCache$, setUseCache] = createSignal<boolean>()
@@ -58,12 +57,7 @@ export const metadatas = mapObject(chains, (chain$, key) => {
       if (!result) return throughSmoldot$
       return of(result)
     }),
-    share({
-      connector: () => new ReplaySubject(1),
-      resetOnComplete: false,
-      resetOnRefCountZero: false,
-      resetOnError: true,
-    }),
+    persistSubscription(),
   )
 })
 
