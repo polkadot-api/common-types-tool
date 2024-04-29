@@ -33,8 +33,7 @@ export const chains: Record<string, Promise<Chain>> = Object.fromEntries(
   Object.entries(chainImports).flatMap(([key, chains]) => {
     const { relayChain, ...parachains } = chains
 
-    const chainRelayChain = new Promise<Chain>(() => {})
-    relayChain.then(({ chainSpec }) =>
+    const chainRelayChain = relayChain.then(({ chainSpec }) =>
       smoldot.addChain({
         chainSpec,
       }),
