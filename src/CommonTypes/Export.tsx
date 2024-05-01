@@ -15,7 +15,7 @@ export type RepositoryEntry = {
   paths: string[]
   type: string
 }
-const allNewKnownTypes$ = state(
+const allKnownTypes$ = state(
   combineLatest({
     chains: combineKeys(selectedChains$, chainTypes$),
     names: commonTypeNames$,
@@ -24,8 +24,6 @@ const allNewKnownTypes$ = state(
       const result: Record<string, RepositoryEntry> = {}
 
       Object.entries(names).forEach(([checksum, name]) => {
-        if (!name) return
-
         const chainsWithType = Array.from(chains.keys()).filter(
           (chain) => checksum in chains.get(chain)!,
         )
@@ -66,16 +64,20 @@ const onlyChanges$ = state(
 )
 
 const newKnownTypes$ = state(
-  combineLatest([allNewKnownTypes$, onlyChanges$]).pipe(
-    map(([allNewKnownTypes, onlyChanges]) =>
+  combineLatest([allKnownTypes$, onlyChanges$]).pipe(
+    map(([allKnownTypes, onlyChanges]) =>
       onlyChanges
         ? Object.fromEntries(
-            Object.entries(allNewKnownTypes).filter(
+            Object.entries(allKnownTypes).filter(
               ([checksum, entry]) =>
                 entry.name !== getCurrentKnownType(checksum),
             ),
           )
-        : allNewKnownTypes,
+        : Object.fromEntries(
+            Object.entries(allKnownTypes).filter(
+              ([, entry]) => entry.name !== null,
+            ),
+          ),
     ),
   ),
   {},

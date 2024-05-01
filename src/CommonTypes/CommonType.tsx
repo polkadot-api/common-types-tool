@@ -1,4 +1,5 @@
-import { TextField } from "@radix-ui/themes"
+import { EnumVar } from "@polkadot-api/metadata-builders"
+import { TextField, Tooltip } from "@radix-ui/themes"
 import { useStateObservable } from "@react-rxjs/core"
 import { FC, useMemo, useState } from "react"
 import { twMerge } from "tailwind-merge"
@@ -86,10 +87,8 @@ export const CommonType: FC<{
           <div>
             <h2 className="text-2xl">Variants</h2>
             <ul className="flex flex-wrap gap-2">
-              {Object.keys(types[0].type.value).map((key) => (
-                <li key={key} className="px-2 py-1 border rounded">
-                  <code>{key}</code>
-                </li>
+              {Object.entries(types[0].type.value).map(([key, value]) => (
+                <Variant key={key} name={key} value={value} />
               ))}
             </ul>
           </div>
@@ -106,6 +105,39 @@ export const CommonType: FC<{
       ) : null}
     </>
   )
+}
+
+const Variant: FC<{
+  name: string
+  value: EnumVar["value"][string]
+}> = ({ name, value }) => {
+  const valueType =
+    value.type === "void" ? "void" : stringifyCircular(value.value)
+
+  return (
+    <Tooltip content={valueType}>
+      <li className="px-2 py-1 border rounded">
+        <code>{name}</code>
+      </li>
+    </Tooltip>
+  )
+}
+const stringifyCircular = (value: unknown) => {
+  const seen = new Set<any>()
+  try {
+    return JSON.stringify(value, (_, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return
+        }
+        seen.add(value)
+      }
+      return value
+    })
+  } catch (ex) {
+    console.error(ex)
+    return `{serialization error}`
+  }
 }
 
 const Chain: FC<{
@@ -162,7 +194,7 @@ const ChainReferences: FC<{ chain: string; checksum: string }> = ({
 
 const ReferenceList: FC<{ references: string[] }> = ({ references }) => (
   <ul className="flex flex-wrap items-center gap-2">
-    {references.sort(sortRefs).map((key) => (
+    {[...new Set(references.sort(sortRefs))].map((key) => (
       <EnumReference key={key} checksum={key} />
     ))}
   </ul>

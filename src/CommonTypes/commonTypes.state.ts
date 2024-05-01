@@ -1,9 +1,5 @@
 import { knownTypesRepository } from "@polkadot-api/codegen"
-import {
-  LookupEntry,
-  getChecksumBuilder,
-  getLookupFn,
-} from "@polkadot-api/metadata-builders"
+import { LookupEntry, getLookupFn } from "@polkadot-api/metadata-builders"
 import { V14, V15 } from "@polkadot-api/substrate-bindings"
 import { state, withDefault } from "@react-rxjs/core"
 import { combineKeys, createSignal, mergeWithKey } from "@react-rxjs/utils"
@@ -14,9 +10,10 @@ import {
   distinctUntilChanged,
   map,
   scan,
+  withLatestFrom,
 } from "rxjs"
 import { selectedChains$ } from "../ChainPicker"
-import { metadatas } from "../api/metadatas"
+import { checksumBuilders, metadatas } from "../api/metadatas"
 import { persistSubscription } from "../lib/persistSubscription"
 
 export type MetadataEntry =
@@ -24,11 +21,11 @@ export type MetadataEntry =
 export type EnumEntry = LookupEntry & { type: "enum"; entry: MetadataEntry }
 export const chainTypes$ = state(
   (chain: string) =>
-    metadatas[chain].pipe(
+    checksumBuilders[chain].pipe(
+      withLatestFrom(metadatas[chain]),
       catchError(() => EMPTY),
-      map((metadata) => {
+      map(([checksumBuilder, metadata]) => {
         const lookup = getLookupFn(metadata.lookup)
-        const checksumBuilder = getChecksumBuilder(metadata)
 
         const result: Record<string, EnumEntry[]> = {}
         for (let i = 0; i < metadata.lookup.length; i++) {

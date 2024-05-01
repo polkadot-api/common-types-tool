@@ -20,6 +20,7 @@ import {
 import { selectedChains$ } from "../ChainPicker"
 import { persistSubscription } from "../lib/persistSubscription"
 import { chains } from "./smoldot"
+import { getChecksumBuilder } from "@polkadot-api/metadata-builders"
 
 export const [changeUseCache$, setUseCache] = createSignal<boolean>()
 export const useCache$ = state(changeUseCache$, true)
@@ -60,6 +61,10 @@ export const metadatas = mapObject(chains, (chain$, key) => {
     persistSubscription(),
   )
 })
+
+export const checksumBuilders = mapObject(metadatas, (metadata$) =>
+  metadata$.pipe(map(getChecksumBuilder), persistSubscription()),
+)
 
 export enum LoadStatus {
   Idle = "Idle",

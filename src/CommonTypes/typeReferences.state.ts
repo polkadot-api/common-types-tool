@@ -1,12 +1,11 @@
 import {
   EnumVar,
   LookupEntry,
-  getChecksumBuilder,
   getLookupFn,
 } from "@polkadot-api/metadata-builders"
 import { state } from "@react-rxjs/core"
-import { map } from "rxjs"
-import { metadatas } from "../api/metadatas"
+import { map, withLatestFrom } from "rxjs"
+import { checksumBuilders, metadatas } from "../api/metadatas"
 
 type References = { direct: string[]; indirect: string[] }
 const emptyReferences: References = { direct: [], indirect: [] }
@@ -21,13 +20,13 @@ const removeDuplicates = <T>(v: Array<T>) => [...new Set(v)]
  */
 export const typeReferences$ = state(
   (chain: string) =>
-    metadatas[chain].pipe(
-      map((metadata) => {
+    checksumBuilders[chain].pipe(
+      withLatestFrom(metadatas[chain]),
+      map(([checksumBuilder, metadata]) => {
         const result: Record<
           string,
           { inputs: References; outputs: References; backRefs: References }
         > = {}
-        const checksumBuilder = getChecksumBuilder(metadata)
         const lookup = getLookupFn(metadata.lookup)
 
         const referenceCache: Record<number, References> = {}
@@ -185,6 +184,7 @@ export const typeReferences$ = state(
 function getEnumInputs(entry: EnumVar["value"][string]): LookupEntry[] {
   switch (entry.type) {
     case "lookupEntry":
+    case "array":
       return [entry.value]
     case "struct":
       return Object.values(entry.value)
