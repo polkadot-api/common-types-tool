@@ -184,7 +184,7 @@ export const typeReferences$ = state(
 function getEnumInputs(entry: EnumVar["value"][string]): LookupEntry[] {
   switch (entry.type) {
     case "lookupEntry":
-      // case "array": <- for next version of papi
+    case "array":
       return [entry.value]
     case "struct":
       return Object.values(entry.value)
