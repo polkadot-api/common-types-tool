@@ -1,5 +1,4 @@
 import { getObservableClient } from "@polkadot-api/observable-client"
-import { V14, V15 } from "@polkadot-api/substrate-bindings"
 import { createClient } from "@polkadot-api/substrate-client"
 import { state } from "@react-rxjs/core"
 import { createSignal } from "@react-rxjs/utils"
@@ -20,7 +19,11 @@ import {
 import { selectedChains$ } from "../ChainPicker"
 import { persistSubscription } from "../lib/persistSubscription"
 import { chains } from "./smoldot"
-import { getChecksumBuilder } from "@polkadot-api/metadata-builders"
+import {
+  getChecksumBuilder,
+  getLookupFn,
+} from "@polkadot-api/metadata-builders"
+import { V14, V15 } from "@polkadot-api/substrate-bindings"
 
 export const [changeUseCache$, setUseCache] = createSignal<boolean>()
 export const useCache$ = state(changeUseCache$, true)
@@ -34,7 +37,7 @@ export const metadatas = mapObject(chains, (chain$, key) => {
       const chainHead = observableClient.chainHead$()
 
       return chainHead.getRuntimeContext$(null).pipe(
-        map((v) => v.metadata),
+        map((v) => v.lookup.metadata),
         take(1),
         finalize(() => {
           chainHead.unfollow()
@@ -48,9 +51,7 @@ export const metadatas = mapObject(chains, (chain$, key) => {
 
   const throughIDB$ = useCache$.pipe(
     take(1),
-    switchMap(async (useCache) =>
-      useCache ? get<V14 | V15 | undefined>(key) : undefined,
-    ),
+    switchMap(async (useCache) => (useCache ? get<V14 | V15>(key) : undefined)),
   )
 
   return throughIDB$.pipe(
@@ -63,7 +64,10 @@ export const metadatas = mapObject(chains, (chain$, key) => {
 })
 
 export const checksumBuilders = mapObject(metadatas, (metadata$) =>
-  metadata$.pipe(map(getChecksumBuilder), persistSubscription()),
+  metadata$.pipe(
+    map((m) => getChecksumBuilder(getLookupFn(m))),
+    persistSubscription(),
+  ),
 )
 
 export enum LoadStatus {

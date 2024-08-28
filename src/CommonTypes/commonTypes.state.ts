@@ -25,7 +25,7 @@ export const chainTypes$ = state(
       withLatestFrom(metadatas[chain]),
       catchError(() => EMPTY),
       map(([checksumBuilder, metadata]) => {
-        const lookup = getLookupFn(metadata.lookup)
+        const lookup = getLookupFn(metadata)
 
         const result: Record<string, EnumEntry[]> = {}
         for (let i = 0; i < metadata.lookup.length; i++) {

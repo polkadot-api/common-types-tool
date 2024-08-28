@@ -27,7 +27,7 @@ export const typeReferences$ = state(
           string,
           { inputs: References; outputs: References; backRefs: References }
         > = {}
-        const lookup = getLookupFn(metadata.lookup)
+        const lookup = getLookupFn(metadata)
 
         const referenceCache: Record<number, References> = {}
         const getLookupReferences = (entry: LookupEntry): References => {
