@@ -11,15 +11,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/react": "^18.3.2",
+    "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "prettier": "^3.2.5",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.11"
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2"
   },
   "prettier": {
     "printWidth": 80,
@@ -27,22 +27,23 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@polkadot-api/codegen": "^0.5.0",
-    "@polkadot-api/metadata-builders": "^0.3.0",
-    "@polkadot-api/observable-client": "^0.3.0",
-    "@polkadot-api/substrate-bindings": "^0.5.0",
-    "@polkadot-api/substrate-client": "^0.1.2",
-    "@radix-ui/themes": "^3.0.4",
+    "@polkadot-api/codegen": "^0.9.0",
+    "@polkadot-api/metadata-builders": "^0.6.0",
+    "@polkadot-api/observable-client": "^0.5.2",
+    "@polkadot-api/substrate-bindings": "^0.6.3",
+    "@polkadot-api/substrate-client": "^0.2.1",
+    "@radix-ui/themes": "^3.1.3",
     "@react-rxjs/core": "^0.10.7",
     "@react-rxjs/utils": "^0.9.7",
     "idb-keyval": "^6.2.1",
-    "lucide-react": "^0.378.0",
-    "polkadot-api": "^0.7.2",
+    "lucide-react": "^0.436.0",
+    "polkadot-api": "^1.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-virtuoso": "^4.7.10",
+    "react-virtuoso": "^4.10.1",
     "rxjs": "^7.8.1",
-    "smoldot": "^2.0.26",
-    "tailwind-merge": "^2.3.0"
-  }
+    "smoldot": "^2.0.30",
+    "tailwind-merge": "^2.5.2"
+  },
+  "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
 }
