@@ -20,11 +20,9 @@ const chainImports = {
     bridgeHub: import("polkadot-api/chains/ksmcc3_bridge_hub"),
     people: import("polkadot-api/chains/ksmcc3_people"),
   },
-  rococo: {
-    relayChain: import("polkadot-api/chains/rococo_v2_2"),
-    assetHub: import("polkadot-api/chains/rococo_v2_2_asset_hub"),
-    bridgeHub: import("polkadot-api/chains/rococo_v2_2_bridge_hub"),
-    people: import("polkadot-api/chains/rococo_v2_2_people"),
+  paseo: {
+    relayChain: import("polkadot-api/chains/paseo"),
+    assetHub: import("polkadot-api/chains/paseo_asset_hub"),
   },
   westend: {
     relayChain: import("polkadot-api/chains/westend2"),
