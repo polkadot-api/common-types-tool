@@ -11,15 +11,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.3",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.10"
+    "postcss": "^8.5.1",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
   },
   "prettier": {
     "printWidth": 80,
@@ -27,23 +27,23 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@polkadot-api/codegen": "^0.12.7",
-    "@polkadot-api/metadata-builders": "^0.9.1",
-    "@polkadot-api/observable-client": "^0.5.14",
-    "@polkadot-api/substrate-bindings": "^0.9.3",
-    "@polkadot-api/substrate-client": "^0.2.2",
-    "@radix-ui/themes": "^3.1.4",
-    "@react-rxjs/core": "^0.10.7",
+    "@polkadot-api/codegen": "^0.12.12",
+    "@polkadot-api/metadata-builders": "^0.10.0",
+    "@polkadot-api/observable-client": "^0.7.0",
+    "@polkadot-api/substrate-bindings": "^0.11.0",
+    "@polkadot-api/substrate-client": "^0.3.0",
+    "@radix-ui/themes": "^3.1.6",
+    "@react-rxjs/core": "^0.10.8",
     "@react-rxjs/utils": "^0.9.7",
     "idb-keyval": "^6.2.1",
-    "lucide-react": "^0.454.0",
-    "polkadot-api": "^1.6.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-virtuoso": "^4.12.0",
+    "lucide-react": "^0.471.1",
+    "polkadot-api": "^1.8.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-virtuoso": "^4.12.3",
     "rxjs": "^7.8.1",
-    "smoldot": "^2.0.30",
-    "tailwind-merge": "^2.5.4"
+    "smoldot": "^2.0.34",
+    "tailwind-merge": "^2.6.0"
   },
-  "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
