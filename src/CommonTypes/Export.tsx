@@ -23,33 +23,35 @@ const allKnownTypes$ = state(
     map(({ chains, names }) => {
       const result: Record<string, RepositoryEntry> = {}
 
-      Object.entries(names).forEach(([checksum, name]) => {
-        const chainsWithType = Array.from(chains.keys()).filter(
-          (chain) => checksum in chains.get(chain)!,
-        )
-        if (chainsWithType.length === 0) return
+      Object.entries(names)
+        .sort(([a], [b]) => (a < b ? -1 : 1))
+        .forEach(([checksum, name]) => {
+          const chainsWithType = Array.from(chains.keys()).filter(
+            (chain) => checksum in chains.get(chain)!,
+          )
+          if (chainsWithType.length === 0) return
 
-        const paths = Array.from(
-          new Set(
-            chainsWithType.flatMap((chain) =>
-              chains
-                .get(chain)!
-                [checksum].map((type) => type.entry.path.join(".")),
+          const paths = Array.from(
+            new Set(
+              chainsWithType.flatMap((chain) =>
+                chains
+                  .get(chain)!
+                  [checksum].map((type) => type.entry.path.join(".")),
+              ),
             ),
-          ),
-        )
+          )
 
-        const selectedChain = chains.get(chainsWithType[0])!
-        const chainType = selectedChain[checksum][0]
-        const type = `Enum(${Object.keys(chainType.value).join(", ")})`
+          const selectedChain = chains.get(chainsWithType[0])!
+          const chainType = selectedChain[checksum][0]
+          const type = `Enum(${Object.keys(chainType.value).join(", ")})`
 
-        result[checksum] = {
-          name,
-          chains: chainsWithType.join(", "),
-          paths,
-          type,
-        }
-      })
+          result[checksum] = {
+            name,
+            chains: chainsWithType.join(", "),
+            paths,
+            type,
+          }
+        })
 
       return result
     }),
